@@ -44,7 +44,7 @@ def add_to_cart():
     user_id = session.get('user_id')
     if not user_id:
         flash("Debes iniciar sesión para agregar productos al carrito.", "danger")
-        return jsonify({"redirect": url_for('serve_index')}), 401
+        return jsonify({"redirect": url_for('serve_login')}), 401
 
     product_id = request.json.get('product_id')
     quantity = request.json.get('quantity', 1)
