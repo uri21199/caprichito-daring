@@ -210,26 +210,62 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-document.getElementById("checkout-button").addEventListener("click", () => {
-    if (confirm("¿Estás seguro de que deseas finalizar la cotización?")) {
-        fetch("/send_quote", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            if (data.message) {
-                alert(data.message); // Mostrar mensaje de éxito
-                loadCart(); // Recargar el carrito para mostrar que está vacío
-            } else if (data.error) {
-                alert(data.error); // Mostrar mensaje de error
+document.addEventListener("DOMContentLoaded", () => {
+    const checkoutButton = document.getElementById("checkout-button");
+
+    checkoutButton.addEventListener("click", async () => {
+        Swal.fire({
+            title: "¿Estás seguro?",
+            text: "Esta acción enviará la cotización y vaciará tu carrito.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#418741",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Sí, enviar cotización",
+            cancelButtonText: "Cancelar"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const response = await fetch("/send_quote", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        Swal.fire({
+                            title: "¡Cotización Enviada!",
+                            text: data.message,
+                            icon: "success",
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+
+                        // Recargar el carrito para reflejar que está vacío
+                        loadCart();
+                    } else {
+                        Swal.fire({
+                            title: "Error",
+                            text: data.error,
+                            icon: "error"
+                        });
+                    }
+                } catch (error) {
+                    console.error("Error al enviar la cotización:", error);
+                    Swal.fire({
+                        title: "Error",
+                        text: "Hubo un problema al enviar la cotización.",
+                        icon: "error"
+                    });
+                }
             }
-        })
-        .catch((error) => console.error("Error al enviar la cotización:", error));
-    }
+        });
+    });
 });
+
 
 async function updateCartCount() {
     try {

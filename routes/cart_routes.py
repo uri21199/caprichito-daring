@@ -158,24 +158,22 @@ def send_quote():
     user_id = session.get('user_id')
     if not user_id:
         return jsonify({"error": "Usuario no autenticado"}), 401
-    
+
     # Obtener información del usuario
     user = User.query.get(user_id)
     if not user:
         return jsonify({"error": "Usuario no encontrado"}), 404
-    
+
     # Obtener el carrito del usuario
     cart = Cart.query.filter_by(user_id=user_id).first()
     if not cart or not cart.cart_items:
         return jsonify({"error": "El carrito está vacío"}), 400
-    
+
     # Construir la información del carrito
     cart_items = []
     total = 0
     for item in cart.cart_items:
         subtotal = item.quantity * item.product.price
-        print("RRIMER PRINT")
-        print(item)
         cart_items.append({
             "name": item.product.name,
             "price": item.product.price,
@@ -189,29 +187,27 @@ def send_quote():
     new_order = Order(
         user_id=user_id,
         total_price=total,
-        status="Pendiente",  # O el estado que quieras asignar inicialmente
+        status="Pendiente",
         cart_id=cart.cart_id
     )
     db.session.add(new_order)
     db.session.commit()
 
-    # Agregar los productos de la orden
+    # Agregar los productos a la orden
     for item in cart_items:
-        print("segundo print")
-        print(item)
         order_item = OrderItem(
             order_id=new_order.order_id,
-            product_id=item['product_id'],  #Necesitas el ID del producto
+            product_id=item['product_id'],
             quantity=item['quantity'],
             price=item['subtotal']
         )
         db.session.add(order_item)
-
     db.session.commit()
 
     # Construir el cuerpo del correo
     cart_details = "\n".join([
-        f"- {item['name']} (x{item['quantity']}): ${item['subtotal']:.2f}" for item in cart_items
+        f"- {item['name']} (x{item['quantity']}): ${item['subtotal']:.2f}"
+        for item in cart_items
     ])
     email_body = f"""
     Cotización realizada:
@@ -238,9 +234,10 @@ def send_quote():
         db.session.commit()
 
         return jsonify({"message": "Cotización enviada con éxito"}), 200
+
     except Exception as e:
         return jsonify({"error": f"Error al enviar la cotización: {str(e)}"}), 500
-    
+
 
 @cart_bp.route('/cart_count', methods=['GET'])
 def cart_count():
