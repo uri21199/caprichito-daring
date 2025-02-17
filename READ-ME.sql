@@ -1,5 +1,5 @@
 -- Query SQL para cargar productos y variaciones:
-CREATE TABLE product (
+CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT,
@@ -9,7 +9,7 @@ CREATE TABLE product (
     imageUrl VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-INSERT INTO product (name, description, price, promotion, imageUrl)
+INSERT INTO products (name, description, price, promotion, imageUrl)
 VALUES
 ('Pelota de Caucho', 'Pelota resistente para perros', 500.00, 450.00, 'img/pelota-caucho.jpg'),
 ('Hueso de Juguete', 'Hueso masticable para perros', 350.00, NULL, 'img/hueso-juguete.jpg'),
@@ -35,9 +35,9 @@ CREATE TABLE product_variations (
     product_id INT NOT NULL,
     variation_name VARCHAR(100) NOT NULL, -- Nombre de la variación (ej: "Color", "Tamaño")
     variation_value VARCHAR(100) NOT NULL, -- Valor de la variación (ej: "Rojo", "Bolson")
-    FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
-INSERT INTO productVariations (product_id, variation_name, variation_value)
+INSERT INTO product_variations (product_id, variation_name, variation_value)
 VALUES
 (1, 'Color', 'Rojo'),
 (1, 'Color', 'Azul'),

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>CAPRICHITO - Coffee Shop HTML Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="description" content="Somos una empresa familiar que se dedica a la producción de pelotas de PVC por rotomoldeo con más de 40 años en el mercado.">
+    
+    <!-- Meta Keywords -->
+    <meta name="keywords" content="pelotas, pelotas pvc, pelotas rotomoldeo, productos publicidad, productos escolares, pelotas rehabilitación, pelotas para chicos, pelotas para mascotas">
+    
+    <!-- Meta Author (opcional) -->
+    <meta name="author" content="Caprichito">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"> 
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="../lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="../lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="../static/css/style.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Navbar Start -->
+    <div class="container-fluid p-0 nav-bar">
+        <nav class="navbar navbar-expand-lg bg-none navbar-dark py-3">
+            <a href="/" class="navbar-brand px-lg-4 m-0">
+                <h1 class="m-0 display-6 text-uppercase text-white">CAPRICHITO</h1>
+            </a>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                <!-- Centered menu -->
+                <ul class="navbar-nav mx-auto p-4">
+                    <li class="nav-item">
+                        <a href="/" class="nav-link active">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/productos" class="nav-link">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/nosotros" class="nav-link">Nosotros</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/servicio" class="nav-link">Compromiso social</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/contacto" class="nav-link">Contacto</a>
+                    </li>
+                </ul>
+                <!-- Right buttons -->
+                <div class="navbar-nav">
+                        <button class="btn btn-outline-light mx-2 position-relative" onclick="location.href='/cart_'">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ total_count }}
+                            </span>    
+                        </button>
+
+                        {% if session.get('logged_in') %}
+                            {% if session.get('role') == 'admin' %}
+                                <!-- Dropdown para administrador -->
+                                <button class="btn btn-outline-light mx-2" onclick="location.href='/admin_dashboard'">
+                                    <i class="fas fa-tools"></i> Administrar
+                                </button>
+                            {% else %}
+                                <!-- Dropdown para usuario logueado -->
+                                <button class="btn btn-outline-light mx-2" onclick="location.href='/profile'">
+                                    <i class="fas fa-user"></i> Mi Cuenta
+                                </button>
+                            {% endif %}
+                            <button class="btn btn-outline-light mx-2" onclick="location.href='/logout'">
+                                Salir
+                            </button>
+                        {% else %}
+                        <!-- Botón para iniciar sesión -->
+                        <button class="btn btn-outline-light mx-2" onclick="location.href='/login'">
+                            <i class="fas fa-user"></i> Iniciar sesión
+                        </button>
+                    {% endif %}
+                </div>    
+            </div>
+        </nav>
+    </div>
+    <!-- Navbar End -->
+
+
+    <!-- Page Header Start -->
+    <div class="container-fluid page-header mb-5 position-relative overlay-bottom">
+        <div class="d-flex flex-column align-items-center justify-content-center pt-0 pt-lg-5" style="min-height: 400px">
+            <h1 class="display-4 mb-3 mt-0 mt-lg-5 text-white text-uppercase">Ingreso</h1>
+            <div class="d-inline-flex mb-lg-5">
+                <p class="m-0 text-white">Inicio de sesión</p>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+
+
+    <div class="container-fluid py-5">
+        <div class="container d-flex justify-content-center">
+            <div class="col-md-6" id="register-form">
+                <h4 class="text-primary text-uppercase text-center mb-4">Registrarse</h4>
+                <p class="text-center text-muted mb-4">
+                    Su cuenta estará pendiente de validación por parte de la tienda Caprichito. Recibirá una notificación cuando sea aprobada.
+                </p>
+                <form action="/register/register" method="POST" id="registerForm" onsubmit="return validateRegisterForm()" class="p-4 border rounded shadow">
+                    <!-- Usuario -->
+                    <div class="form-group">
+                        <label for="register-store_name">Nombre de tienda*</label>
+                        <input type="text" class="form-control" id="register-store_name" name="store_name" placeholder="Ingrese el nombre de su tienda" required>
+                    </div>
+                    <!-- Email -->
+                    <div class="form-group mt-3">
+                        <label for="register-email">Correo Electrónico*</label>
+                        <input type="email" class="form-control" id="register-email" name="mail" placeholder="Ingrese su correo electrónico" required>
+                        <small class="form-text text-muted">Ingrese un correo válido (ejemplo@dominio.com).</small>
+                    </div>
+                    <!-- Contraseña -->
+                    <div class="form-group mt-3">
+                        <label for="register-password">Contraseña*</label>
+                        <input type="password" class="form-control" id="register-password" name="password" placeholder="Ingrese una contraseña" required>
+                        <small class="form-text text-muted">
+                            La contraseña debe tener al menos 8 caracteres, 1 mayúscula, 1 número y 1 símbolo.
+                        </small>
+                    </div>
+                    <!-- Repetir Contraseña -->
+                    <div class="form-group mt-3">
+                        <label for="confirm-password">Repetir Contraseña*</label>
+                        <input type="password" class="form-control" id="confirm-password" placeholder="Repita la contraseña" required>
+                    </div>
+                    <!-- CUIT -->
+                    <div class="form-group mt-3">
+                        <label for="register-cuit">CUIT*</label>
+                        <input type="text" class="form-control" id="register-cuit" name="cuit" placeholder="Ingrese su CUIT" required>
+                        <small class="form-text text-muted">El CUIT debe tener guiones (ejemplo: 20-12345678-9).</small>
+                    </div>
+                    <!-- Provincia -->
+                    <div class="form-group mt-3">
+                        <label for="register-province">Provincia (opcional)</label>
+                        <input type="text" class="form-control" id="register-province" name="province" placeholder="Ingrese su provincia">
+                    </div>
+                    <!-- Ciudad -->
+                    <div class="form-group mt-3">
+                        <label for="register-city">Ciudad (opcional)</label>
+                        <input type="text" class="form-control" id="register-city" name="city" placeholder="Ingrese su ciudad">
+                    </div>
+                    <!-- Botón de Enviar -->
+                    <button type="submit" class="btn btn-primary btn-block mt-4">Registrarse</button>
+                </form>
+                <!-- Enlace para iniciar sesión -->
+                <p class="mt-3 text-center">
+                    ¿Ya tienes cuenta? <a href="/auth/user_login" class="text-primary font-weight-bold">Inicia sesión aquí</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    
+
+
+    <div class="container-fluid footer text-white mt-5 pt-5 px-0 position-relative overlay-top">
+        <div class="row mx-0 pt-5 px-sm-3 px-lg-5 mt-4">
+            <!-- Contact Section -->
+            <div class="col-lg-4 col-md-6 mb-5 text-center">
+                <h4 class="text-white text-uppercase mb-4" style="letter-spacing: 3px;">Contacto</h4>
+                <p id="address"><i class="fa fa-map-marker-alt mr-2"></i></p>
+                <p id="phone"><i class="fa fa-phone-alt mr-2"></i></p>
+                <p id="email"><i class="fa fa-envelope mr-2"></i></p>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-5 text-center">
+                <h4 class="text-white text-uppercase mb-4" style="letter-spacing: 3px;">Redes</h4>
+                <div class="d-flex justify-content-center">
+                    <!--<a class="btn btn-lg btn-outline-light btn-lg-square mr-2" id="facebook" href="#"><i class="fab fa-facebook-f"></i></a>-->
+                    <a class="btn btn-lg btn-outline-light btn-lg-square mr-2" id="instagram" href="#"><i class="fab fa-instagram"></i></a>
+                    <!--<a class="btn btn-lg btn-outline-light btn-lg-square mr-2" id="whatsapp" href="#"><i class="fab fa-whatsapp"></i></a>-->
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-5 text-center">
+                <h4 class="text-white text-uppercase mb-4" style="letter-spacing: 3px;">Horarios de atención</h4>
+                <div>
+            <h6 class="text-white text-uppercase">Lunes - Jueves</h6>
+                    <p>9:00 - 17:00</p>
+                </div>
+            </div>
+<!--              <div class="col-lg-3 col-md-6 mb-5">
+                <h4 class="text-white text-uppercase mb-4" style="letter-spacing: 3px;">Newsletter</h4>
+                <p>Amet elitr vero magna sed ipsum sit kasd sea elitr lorem rebum</p>
+                <div class="w-100">
+                    <div class="input-group">
+                        <input type="text" class="form-control border-light" style="padding: 25px;" placeholder="Your Email">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary font-weight-bold px-3">Sign Up</button>
+                        </div>
+                    </div>
+                </div>
+            </div> --> 
+        </div>
+        <div class="container-fluid text-center text-white border-top mt-4 py-4 px-sm-3 px-md-5" style="border-color: rgba(256, 256, 256, .1) !important;">
+            <p class="mb-2 text-white">Copyright &copy; <a class="font-weight-bold" href="#">Domain</a>. All Rights Reserved.</a></p>
+            <p class="m-0 text-white">Designed by <a class="font-weight-bold" href="">Lautaro Bustos</a></p>
+        </div>
+    </div>
+    <!-- Footer End -->
+    {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+        <div class="alert-container" style="position: fixed; top: 20px; right: 20px; z-index: 1050;">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+        <script>
+            // Cerrar las alertas automáticamente después de 3 segundos
+            setTimeout(() => {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(alert => {
+                    alert.classList.remove('show');
+                    alert.classList.add('fade');
+                    setTimeout(() => alert.remove(), 150); // Espera el tiempo de la animación
+                });
+            }, 3000);
+        </script>
+    {% endif %}
+    {% endwith %}
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="../lib/easing/easing.min.js"></script>
+    <script src="../lib/waypoints/waypoints.min.js"></script>
+    <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="../lib/tempusdominus/js/moment.min.js"></script>
+    <script src="../lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="../lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Contact Javascript File -->
+    <script src="../mail/jqBootstrapValidation.min.js"></script>
+    <script src="../mail/contact.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="../static/js/main.js"></script>
+    <script src="../static/js/site.js"></script>
+    <script src="../static/js/cart.js"></script>
+</body>
+
+</html>

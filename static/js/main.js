@@ -68,3 +68,16 @@
     
 })(jQuery);
 
+
+
+fetch('/check_session')
+    .then(response => response.text())
+    .then(data => {
+        console.log(data); // Muestra "Sesión activa" o "No hay sesión activa"
+        if (data === "Sesión activa") {
+            console.log("Tienes una sesión activa");
+        } else {
+            console.log("No estás logueado");
+        }
+    })
+    .catch(error => console.error('Error al verificar la sesión:', error));

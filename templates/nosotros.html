@@ -5,8 +5,13 @@
     <meta charset="utf-8">
     <title>CAPRICHITO - Coffee Shop HTML Template</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Free Website Template" name="keywords">
-    <meta content="Free Website Template" name="description">
+    <meta name="description" content="Somos una empresa familiar que se dedica a la producción de pelotas de PVC por rotomoldeo con más de 40 años en el mercado.">
+    
+    <!-- Meta Keywords -->
+    <meta name="keywords" content="pelotas, pelotas pvc, pelotas rotomoldeo, productos publicidad, productos escolares, pelotas rehabilitación, pelotas para chicos, pelotas para mascotas">
+    
+    <!-- Meta Author (opcional) -->
+    <meta name="author" content="Caprichito">
 
     <!-- Favicon -->
     <link href="img/favicon.ico" rel="icon">
@@ -19,18 +24,18 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link href="../lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="../lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
 
     <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/style.min.css" rel="stylesheet">
+    <link href="../static/css/style.min.css" rel="stylesheet">
 </head>
 
 <body>
     <!-- Navbar Start -->
     <div class="container-fluid p-0 nav-bar">
         <nav class="navbar navbar-expand-lg bg-none navbar-dark py-3">
-            <a href="index.html" class="navbar-brand px-lg-4 m-0">
+            <a href="/" class="navbar-brand px-lg-4 m-0">
                 <h1 class="m-0 display-6 text-uppercase text-white">CAPRICHITO</h1>
             </a>
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
@@ -40,30 +45,52 @@
                 <!-- Centered menu -->
                 <ul class="navbar-nav mx-auto p-4">
                     <li class="nav-item">
-                        <a href="index.html" class="nav-link active">Inicio</a>
+                        <a href="/" class="nav-link active">Inicio</a>
                     </li>
                     <li class="nav-item">
-                        <a href="productos.html" class="nav-link">Productos</a>
+                        <a href="/productos" class="nav-link">Productos</a>
                     </li>
                     <li class="nav-item">
-                        <a href="nosotros.html" class="nav-link">Nosotros</a>
+                        <a href="/nosotros" class="nav-link">Nosotros</a>
                     </li>
                     <li class="nav-item">
-                        <a href="servicio.html" class="nav-link">Compromiso social</a>
+                        <a href="/servicio" class="nav-link">Compromiso social</a>
                     </li>
                     <li class="nav-item">
-                        <a href="contacto.html" class="nav-link">Contacto</a>
+                        <a href="/contacto" class="nav-link">Contacto</a>
                     </li>
                 </ul>
                 <!-- Right buttons -->
                 <div class="navbar-nav">
-                    <button class="btn btn-outline-light mx-2" onclick="location.href='cart.html'">
-                        <i class="fas fa-shopping-cart"></i>
-                    </button>
-                    <button class="btn btn-outline-light mx-2" onclick="location.href='login.html'">
-                        <i class="fas fa-user"></i> Iniciar sesión
-                    </button>
-                </div>
+                        <button class="btn btn-outline-light mx-2 position-relative" onclick="location.href='/cart_'">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ total_count }}
+                            </span>    
+                        </button>
+
+                        {% if session.get('logged_in') %}
+                            {% if session.get('role') == 'admin' %}
+                                <!-- Dropdown para administrador -->
+                                <button class="btn btn-outline-light mx-2" onclick="location.href='/admin_dashboard'">
+                                    <i class="fas fa-tools"></i> Administrar
+                                </button>
+                            {% else %}
+                                <!-- Dropdown para usuario logueado -->
+                                <button class="btn btn-outline-light mx-2" onclick="location.href='/profile'">
+                                    <i class="fas fa-user"></i> Mi Cuenta
+                                </button>
+                            {% endif %}
+                            <button class="btn btn-outline-light mx-2" onclick="location.href='/logout'">
+                                Salir
+                            </button>
+                        {% else %}
+                        <!-- Botón para iniciar sesión -->
+                        <button class="btn btn-outline-light mx-2" onclick="location.href='/login'">
+                            <i class="fas fa-user"></i> Iniciar sesión
+                        </button>
+                    {% endif %}
+                </div>    
             </div>
         </nav>
     </div>
@@ -95,17 +122,17 @@
                 <div class="col-lg-4 py-0 py-lg-5">
                     <h1 class="mb-3">Nuestra historia</h1>
                     <!-- <h5 class="mb-3">Eos kasd eos dolor vero vero, lorem stet diam rebum. Ipsum amet sed vero dolor sea</h5> -->
-                    <p>Takimata sed vero vero no sit sed, justo clita duo no duo amet et, nonumy kasd sed dolor eos diam lorem eirmod. Amet sit amet amet no. Est nonumy sed labore eirmod sit magna. Erat at est justo sit ut. Labor diam sed ipsum et eirmod</p>
+                    <p>Somos una empresa argentina con más de cuatro décadas de historia. Fabricamos pelotas y artículos deportivos, pensadas para satisÿacer las necesidades de chicos y deportistas. Nuestra experiencia nos permite combinar técnicas tradicionales con tecnología moderna, logrando productos confiables y de alto rendimiento. </p>
                     <!-- <a href="" class="btn btn-secondary font-weight-bold py-2 px-4 mt-2">Conocenos</a> -->
                 </div>
                 <div class="col-lg-4 py-5 py-lg-0" style="min-height: 500px;">
                     <div class="position-relative h-100">
-                        <img class="position-absolute w-100 h-100" src="img/about.png" style="object-fit: cover;">
+                        <img class="position-absolute w-100 h-100" src="../static/img/about.png" style="object-fit: cover;">
                     </div>
                 </div>
                 <div class="col-lg-4 py-0 py-lg-5">
                     <h1 class="mb-3">¿Qué buscamos?</h1>
-                    <p>Invidunt lorem justo sanctus clita. Erat lorem labore ea, justo dolor lorem ipsum ut sed eos, ipsum et dolor kasd sit ea justo. Erat justo sed sed diam. Ea et erat ut sed diam sea ipsum est dolor</p>
+                    <p>Apostamos por la producción nacional, trabajando con pasión para ofrecer lo mejor a nuestros clientes en cada partido, entrenamiento o juego</p>
                     <!-- <h5 class="mb-3"><i class="fa fa-check text-primary mr-3"></i>Lorem ipsum dolor sit amet</h5>
                     <h5 class="mb-3"><i class="fa fa-check text-primary mr-3"></i>Lorem ipsum dolor sit amet</h5>
                     <h5 class="mb-3"><i class="fa fa-check text-primary mr-3"></i>Lorem ipsum dolor sit amet</h5>
@@ -117,33 +144,28 @@
     <!-- About End -->
 
 
-    <!-- Footer Start -->
     <div class="container-fluid footer text-white mt-5 pt-5 px-0 position-relative overlay-top">
         <div class="row mx-0 pt-5 px-sm-3 px-lg-5 mt-4">
-        <div class="row mx-0 pt-5 px-sm-3 px-lg-5 mt-4">
+            <!-- Contact Section -->
             <div class="col-lg-4 col-md-6 mb-5 text-center">
                 <h4 class="text-white text-uppercase mb-4" style="letter-spacing: 3px;">Contacto</h4>
-                <p><i class="fa fa-map-marker-alt mr-2"></i>Buenos Aires</p>
-                <p><i class="fa fa-phone-alt mr-2"></i>Teléfono</p>
-                <p class="m-0"><i class="fa fa-envelope mr-2"></i>caprichito@gmail.com</p>
+                <p id="address"><i class="fa fa-map-marker-alt mr-2"></i></p>
+                <p id="phone"><i class="fa fa-phone-alt mr-2"></i></p>
+                <p id="email"><i class="fa fa-envelope mr-2"></i></p>
             </div>
             <div class="col-lg-4 col-md-6 mb-5 text-center">
                 <h4 class="text-white text-uppercase mb-4" style="letter-spacing: 3px;">Redes</h4>
-                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsam, ut.</p>
                 <div class="d-flex justify-content-center">
-                    <a class="btn btn-lg btn-outline-light btn-lg-square mr-2" href="#"><i class="fab fa-twitter"></i></a>
-                    <a class="btn btn-lg btn-outline-light btn-lg-square mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a class="btn btn-lg btn-outline-light btn-lg-square mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
-                    <a class="btn btn-lg btn-outline-light btn-lg-square" href="#"><i class="fab fa-instagram"></i></a>
+                    <!--<a class="btn btn-lg btn-outline-light btn-lg-square mr-2" id="facebook" href="#"><i class="fab fa-facebook-f"></i></a>-->
+                    <a class="btn btn-lg btn-outline-light btn-lg-square mr-2" id="instagram" href="#"><i class="fab fa-instagram"></i></a>
+                    <!--<a class="btn btn-lg btn-outline-light btn-lg-square mr-2" id="whatsapp" href="#"><i class="fab fa-whatsapp"></i></a>-->
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 mb-5 text-center">
                 <h4 class="text-white text-uppercase mb-4" style="letter-spacing: 3px;">Horarios de atención</h4>
                 <div>
-                    <h6 class="text-white text-uppercase">Lunes - Viernes</h6>
-                    <p>9:00 - 18:00</p>
-                    <h6 class="text-white text-uppercase">Sabados - Domingos</h6>
-                    <p>10:00 - 14:00</p>
+                <h6 class="text-white text-uppercase">Lunes - Jueves</h6>
+                    <p>9:00 - 17:00</p>
                 </div>
             </div>
 <!--              <div class="col-lg-3 col-md-6 mb-5">
@@ -165,7 +187,29 @@
         </div>
     </div>
     <!-- Footer End -->
-
+    {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+        <div class="alert-container" style="position: fixed; top: 20px; right: 20px; z-index: 1050;">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+        <script>
+            // Cerrar las alertas automáticamente después de 3 segundos
+            setTimeout(() => {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(alert => {
+                    alert.classList.remove('show');
+                    alert.classList.add('fade');
+                    setTimeout(() => alert.remove(), 150); // Espera el tiempo de la animación
+                });
+            }, 3000);
+        </script>
+    {% endif %}
+    {% endwith %}
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
@@ -174,19 +218,21 @@
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="lib/tempusdominus/js/moment.min.js"></script>
-    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
-    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="../lib/easing/easing.min.js"></script>
+    <script src="../lib/waypoints/waypoints.min.js"></script>
+    <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="../lib/tempusdominus/js/moment.min.js"></script>
+    <script src="../lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="../lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
     <!-- Contact Javascript File -->
-    <script src="mail/jqBootstrapValidation.min.js"></script>
-    <script src="mail/contact.js"></script>
+    <script src="../mail/jqBootstrapValidation.min.js"></script>
+    <script src="../mail/contact.js"></script>
 
     <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+    <script src="../static/js/main.js"></script>
+    <script src="../static/js/site.js"></script>
+    <script src="../static/js/cart.js"></script>
 </body>
 
 </html>

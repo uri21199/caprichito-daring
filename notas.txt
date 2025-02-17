@@ -1,0 +1,8 @@
+Envios, publicidad, contacto
+sucursales para clientes
+El check tiene que poder ser editado
+El usuario tiene que poder registrar sucursales
+Mail a admin por el registro de sucursal
+Admin va a aprobar o no sucursal
+Cuando se va a finalizar la orden se va a poder agregar sucursal destino y cantidad para esa sucursal
+Es solo informativo el tema de la compra, se autoriza todo o no
