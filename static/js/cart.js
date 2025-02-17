@@ -175,24 +175,39 @@ document.addEventListener("DOMContentLoaded", () => {
     const emptyCartButton = document.getElementById("empty-cart-button");
 
     emptyCartButton.addEventListener("click", () => {
-        if (confirm("¿Estás seguro de que deseas vaciar el carrito?")) {
-            fetch("empty_cart", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.message) {
-                    alert(data.message);
-                    loadCart(); // Recargar el carrito para mostrarlo vacío
-                }
-            })
-            .catch((error) => console.error("Error:", error));
-        }
+        Swal.fire({
+            title: "¿Estás seguro?",
+            text: "Esta acción vaciará todo tu carrito.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Sí, vaciar carrito",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch("/empty_cart", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.flash_message) {
+                        Swal.fire("¡Hecho!", data.flash_message, "success");
+                        loadCart(); // Recargar el carrito
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    Swal.fire("Error", "Ocurrió un problema al vaciar el carrito.", "error");
+                });
+            }
+        });
     });
 });
+
 
 
 document.getElementById("checkout-button").addEventListener("click", () => {
