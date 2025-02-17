@@ -174,7 +174,7 @@ function updateCartTotal() {
 document.addEventListener("DOMContentLoaded", () => {
     const emptyCartButton = document.getElementById("empty-cart-button");
 
-    emptyCartButton.addEventListener("click", () => {
+    emptyCartButton.addEventListener("click", async () => {
         Swal.fire({
             title: "¿Estás seguro?",
             text: "Esta acción vaciará todo tu carrito.",
@@ -184,49 +184,21 @@ document.addEventListener("DOMContentLoaded", () => {
             cancelButtonColor: "#3085d6",
             confirmButtonText: "Sí, vaciar carrito",
             cancelButtonText: "Cancelar"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                fetch("/empty_cart", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.flash_message) {
-                        Swal.fire("¡Hecho!", data.flash_message, "success");
-                        loadCart(); // Recargar el carrito
-                    }
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                    Swal.fire("Error", "Ocurrió un problema al vaciar el carrito.", "error");
-                });
-            }
-        });
-    });
-});
-
-
-
-document.addEventListener("DOMContentLoaded", () => {
-    const checkoutButton = document.getElementById("checkout-button");
-
-    checkoutButton.addEventListener("click", async () => {
-        Swal.fire({
-            title: "¿Estás seguro?",
-            text: "Esta acción enviará la cotización y vaciará tu carrito.",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#418741",
-            cancelButtonColor: "#3085d6",
-            confirmButtonText: "Sí, enviar cotización",
-            cancelButtonText: "Cancelar"
         }).then(async (result) => {
             if (result.isConfirmed) {
+                Swal.fire({
+                    title: "Vaciando carrito...",
+                    text: "Por favor, espera mientras se vacía tu carrito.",
+                    icon: "info",
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
                 try {
-                    const response = await fetch("/send_quote", {
+                    const response = await fetch("/empty_cart", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -234,18 +206,18 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
 
                     const data = await response.json();
+                    Swal.close(); // Cerrar el modal de carga
 
                     if (response.ok) {
                         Swal.fire({
-                            title: "¡Cotización Enviada!",
+                            title: "¡Carrito Vacío!",
                             text: data.message,
                             icon: "success",
-                            timer: 2000,
+                            timer: 1200,
                             showConfirmButton: false
+                        }).then(() => {
+                            window.location.href = "/cart_"; // Redirigir después del mensaje
                         });
-
-                        // Recargar el carrito para reflejar que está vacío
-                        loadCart();
                     } else {
                         Swal.fire({
                             title: "Error",
@@ -254,10 +226,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         });
                     }
                 } catch (error) {
-                    console.error("Error al enviar la cotización:", error);
+                    console.error("Error al vaciar el carrito:", error);
                     Swal.fire({
                         title: "Error",
-                        text: "Hubo un problema al enviar la cotización.",
+                        text: "Hubo un problema al vaciar el carrito.",
                         icon: "error"
                     });
                 }
@@ -265,6 +237,65 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const checkoutButton = document.getElementById("checkout-button");
+
+    checkoutButton.addEventListener("click", async () => {
+        Swal.fire({
+            title: "Procesando cotización...",
+            text: "Por favor, espera mientras se finaliza la cotización.",
+            icon: "info",
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        try {
+            const response = await fetch("/send_quote", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const data = await response.json();
+            Swal.close(); // Cerrar el modal de carga
+
+            if (response.ok) {
+                Swal.fire({
+                    title: "¡Cotización Enviada!",
+                    text: data.message,
+                    icon: "success",
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+
+                // Recargar el carrito para reflejar que está vacío
+                loadCart();
+            } else {
+                Swal.fire({
+                    title: "Error",
+                    text: data.error,
+                    icon: "error"
+                });
+            }
+        } catch (error) {
+            console.error("Error al enviar la cotización:", error);
+            Swal.fire({
+                title: "Error",
+                text: "Hubo un problema al enviar la cotización.",
+                icon: "error"
+            });
+        }
+    });
+});
+
 
 
 async function updateCartCount() {

@@ -1,7 +1,8 @@
-from flask import Blueprint, session, jsonify, redirect, request, make_response, flash, url_for
+from flask import Blueprint, session, jsonify, redirect, request, make_response, flash, url_for, current_app
 from flask_mail import Message
 from extensions import db, mail_ext
 from models import Cart, CartItem, Product, User, Order, OrderItem  # Asegúrate de importar tus modelos
+import threading
 
 cart_bp = Blueprint('cart', __name__)
 
@@ -145,13 +146,24 @@ def empty_cart():
         return jsonify({"error": "Usuario no autenticado"}), 401
 
     cart = Cart.query.filter_by(user_id=user_id).first()
-    if cart:
-        for item in cart.cart_items:
-            db.session.delete(item)
+    if cart and cart.cart_items:
+        # Eliminación masiva en lugar de un loop, más rápido
+        CartItem.query.filter_by(cart_id=cart.cart_id).delete()
         db.session.commit()
+        print("✅ Carrito vaciado correctamente")
+        return jsonify({"message": "Carrito vaciado correctamente"}), 200
 
-    return jsonify({"message": "Carrito vaciado correctamente"}), 200
+    return jsonify({"error": "El carrito ya estaba vacío"}), 400
 
+
+
+def send_email_async(app, msg):
+    with app.app_context():
+        try:
+            mail_ext.send(msg)
+            print("✅ Correo enviado correctamente")
+        except Exception as e:
+            print(f"❌ Error al enviar correo: {e}")
 
 @cart_bp.route('/send_quote', methods=['POST'])
 def send_quote():
@@ -159,17 +171,14 @@ def send_quote():
     if not user_id:
         return jsonify({"error": "Usuario no autenticado"}), 401
 
-    # Obtener información del usuario
     user = User.query.get(user_id)
     if not user:
         return jsonify({"error": "Usuario no encontrado"}), 404
 
-    # Obtener el carrito del usuario
     cart = Cart.query.filter_by(user_id=user_id).first()
     if not cart or not cart.cart_items:
         return jsonify({"error": "El carrito está vacío"}), 400
 
-    # Construir la información del carrito
     cart_items = []
     total = 0
     for item in cart.cart_items:
@@ -183,7 +192,6 @@ def send_quote():
         })
         total += subtotal
 
-    # Crear la orden en la base de datos
     new_order = Order(
         user_id=user_id,
         total_price=total,
@@ -193,7 +201,6 @@ def send_quote():
     db.session.add(new_order)
     db.session.commit()
 
-    # Agregar los productos a la orden
     for item in cart_items:
         order_item = OrderItem(
             order_id=new_order.order_id,
@@ -204,39 +211,40 @@ def send_quote():
         db.session.add(order_item)
     db.session.commit()
 
-    # Construir el cuerpo del correo
     cart_details = "\n".join([
         f"- {item['name']} (x{item['quantity']}): ${item['subtotal']:.2f}"
         for item in cart_items
     ])
+    
     email_body = f"""
     Cotización realizada:
     Número de carrito: {cart.cart_id}
     Usuario: {user.store_name} ({user.mail})
+    
     Productos:
     {cart_details}
+
     Total: ${total:.2f}
     """
 
-    # Enviar el correo
-    try:
-        msg = Message(
-            subject="Nueva Cotización",
-            sender="uri21199@gmail.com",
-            recipients=["lautarouab@gmail.com"]
-        )
-        msg.body = email_body
-        mail_ext.send(msg)
+    msg = Message(
+        subject="Nueva Cotización",
+        sender="uri21199@gmail.com",
+        recipients=["lautarouab@gmail.com"]
+    )
+    msg.body = email_body
 
-        # Vaciar el carrito después de enviar la cotización
-        for item in cart.cart_items:
-            db.session.delete(item)
-        db.session.commit()
+    # Enviar el correo en un HILO para evitar bloqueos
+    thread = threading.Thread(target=send_email_async, args=(current_app._get_current_object(), msg))
+    thread.start()
 
-        return jsonify({"message": "Cotización enviada con éxito"}), 200
+    # Vaciar el carrito después de enviar la cotización
+    for item in cart.cart_items:
+        db.session.delete(item)
+    db.session.commit()
 
-    except Exception as e:
-        return jsonify({"error": f"Error al enviar la cotización: {str(e)}"}), 500
+    return jsonify({"message": "Cotización enviada correctamente"}), 200
+
 
 
 @cart_bp.route('/cart_count', methods=['GET'])
