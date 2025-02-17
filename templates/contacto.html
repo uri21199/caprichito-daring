@@ -29,6 +29,7 @@
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="../static/css/style.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -143,22 +144,22 @@
                         <div id="success"></div>
                         <form name="sentMessage" id="contactForm" novalidate="novalidate">
                             <div class="control-group">
-                                <input type="text" class="form-control bg-transparent p-4" id="name" placeholder="Nombre"
+                                <input type="text" class="form-control bg-transparent p-4" id="name" name="name" placeholder="Nombre"
                                     required="required" data-validation-required-message="Por favor ingresa tu nombre" />
                                 <p class="help-block text-danger"></p>
                             </div>
                             <div class="control-group">
-                                <input type="email" class="form-control bg-transparent p-4" id="email" placeholder="Email"
+                                <input type="email" class="form-control bg-transparent p-4" id="email" name="email" placeholder="Email"
                                     required="required" data-validation-required-message="Por favor ingresa tu email" />
                                 <p class="help-block text-danger"></p>
                             </div>
                             <div class="control-group">
-                                <input type="text" class="form-control bg-transparent p-4" id="subject" placeholder="Asunto"
+                                <input type="text" class="form-control bg-transparent p-4" id="subject" name="subject" placeholder="Asunto"
                                     required="required" data-validation-required-message="Por favor ingresa un asunto" />
                                 <p class="help-block text-danger"></p>
                             </div>
                             <div class="control-group">
-                                <textarea class="form-control bg-transparent py-3 px-4" rows="5" id="message" placeholder="Mensaje"
+                                <textarea class="form-control bg-transparent py-3 px-4" rows="5" id="message" name="message" placeholder="Mensaje"
                                     required="required"
                                     data-validation-required-message="Por favor ingresa tu mensaje"></textarea>
                                 <p class="help-block text-danger"></p>
@@ -264,6 +265,46 @@
     <script src="../static/js/main.js"></script>
     <script src="../static/js/site.js"></script>
     <script src="../static/js/cart.js"></script>
+    <script>
+        document.getElementById("contactForm").addEventListener("submit", async function(event) {
+    event.preventDefault(); // Evita el refresco de la página
+
+    const formData = new FormData(this);
+
+    try {
+        const response = await fetch("/send_email", {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            Swal.fire({
+                title: "¡Éxito!",
+                text: data.message,
+                icon: "success",
+                timer: 2000,
+                showConfirmButton: false
+            });
+            this.reset(); // Vaciar formulario después de enviar
+        } else {
+            Swal.fire({
+                title: "Error",
+                text: data.error,
+                icon: "error"
+            });
+        }
+    } catch (error) {
+        console.error("Error al enviar el formulario:", error);
+        Swal.fire({
+            title: "Error",
+            text: "No se pudo enviar el correo.",
+            icon: "error"
+        });
+    }
+});
+    </script>
 </body>
 
 </html>

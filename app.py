@@ -1,5 +1,6 @@
-from flask import Flask, send_from_directory, session, redirect, url_for, render_template, flash
+from flask import Flask, send_from_directory, session, redirect, url_for, render_template, flash, request, jsonify
 from config import Config
+from flask_mail import Mail, Message
 from extensions import db, login_manager
 from routes.product_routes import product_bp
 from routes.carousel_routes import carousel_bp
@@ -156,6 +157,42 @@ def create_app():
             return "Sesión activa", 200
         else:
             return "No hay sesión activa", 200
+
+
+    @app.route("/send_email", methods=["POST"])
+    def send_email():
+        name = request.form.get("name")
+        email = request.form.get("email")
+        subject = request.form.get("subject")
+        message = request.form.get("message")
+
+        if not (name and email and subject and message):
+            return jsonify({"error": "Todos los campos son obligatorios"}), 400
+
+        try:
+            msg = Message(
+                subject=f"Nuevo mensaje de contacto: {subject}",
+                sender=email,
+                recipients=["lautarouab@gmail.com"]
+            )
+            msg.body = f"""
+            Nombre: {name}
+            Email: {email}
+            Asunto: {subject}
+
+            Mensaje:
+            {message}
+            """
+
+            # Usamos mail_ext para enviar el correo
+            mail_ext.send(msg)
+
+            return jsonify({"message": "Correo enviado correctamente"}), 200
+
+        except Exception as e:
+            return jsonify({"error": f"Error al enviar el correo: {str(e)}"}), 500
+
+
 
     return app
 
