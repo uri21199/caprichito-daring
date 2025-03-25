@@ -1,0 +1,20 @@
+Creación de usuarios administradores y logueo de usuario administrador: OK
+Carga de productos al carrito: OK
+Modificación de cantidades en el carrito: OK
+Cambio del numero del carrito: OK
+Creación de la orden: OK
+Productos en la orden: OK
+Carga de ordenes en la web de gestión de usuario admin: OK
+Cambio de estado a Cancelada o Confirmada: OK
+Mail con creación de usuario: OK
+Mail con cotización y sin tardanza: OK
+Palabras y frases en la web: OK
+Confirmación de vaciar carrito, confirmación de vaciado y de vuelta a cart: OK
+Confirmación de finalizar cotización: OK
+Si no inicia sesión y quiere cargar productos se manda a login: OK
+Envio de mail en contacto: OK
+
+caprichito
+uri21199
+34Bostero!
+uri21199.mysql.pythonanywhere-services.com

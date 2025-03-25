@@ -178,6 +178,7 @@
             <button class="tab-button active" data-tab="ordenes">Ordenes</button>
             <button class="tab-button" data-tab="sitio">Sitio</button>
             <button class="tab-button" data-tab="usuarios">Usuarios</button>
+            <button class="tab-button" data-tab="productos">Productos</button>
             <button class="tab-button" data-tab="perfil">Perfil</button>
         </div>
 
@@ -323,6 +324,31 @@
                 </div>
                                
             </div>
+
+            </div>
+            <div class="tab-pane" id="productos">
+                <h3>Administrar Productos</h3>
+                <div class="table-container">
+                    <table class="table table-striped" id="products-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Precio</th>
+                                <th>Promoción</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Aquí se insertarán dinámicamente los productos -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+
             <div class="tab-pane" id="perfil">
                 <h3>Perfil</h3>
                 <div class="container">
@@ -475,6 +501,7 @@
     <script src="../static/js/main.js"></script>
     <script src="../static/js/site.js"></script>
     <script src="../static/js/cart.js"></script>
+    <script src="../static/js/admin_products.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
     const tabButtons = document.querySelectorAll('.tab-button');

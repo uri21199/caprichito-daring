@@ -4,12 +4,11 @@ import os
 load_dotenv()  # Carga las variables desde el archivo .env
 
 class Config:
-    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:@127.0.0.1/prog_cap"
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SECRET_KEY = "tu_clave_secreta_super_segura"
-    MAIL_SERVER = 'smtp.gmail.com'
-    MAIL_PORT = 587
-    MAIL_USE_TLS = True
-    MAIL_USERNAME = 'uri21199@gmail.com'  # Reemplázalo por tu correo
-    MAIL_PASSWORD = 'apuz ocmu tcge qbyz'  
-    MAIL_DEFAULT_SENDER = 'uri21199@gmail.com'
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL")
+    SECRET_KEY = os.getenv("SECRET_KEY")
+    MAIL_SERVER = os.getenv("MAIL_SERVER")
+    MAIL_PORT = int(os.getenv("MAIL_PORT"))
+    MAIL_USE_TLS = os.getenv("MAIL_USE_TLS") == 'True'
+    MAIL_USERNAME = os.getenv("MAIL_USERNAME")
+    MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
+    MAIL_DEFAULT_SENDER = os.getenv("MAIL_DEFAULT_SENDER")
