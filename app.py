@@ -196,6 +196,7 @@ def create_app():
 
     return app
 
+app = create_app()  # ← 🔥 Esto le permite a Gunicorn encontrar la app
+
 if __name__ == "__main__":
-    app = create_app()
     app.run()
