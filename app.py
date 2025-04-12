@@ -18,6 +18,11 @@ import os
 import psycopg2
 import psycopg2.extensions
 import psycopg2.extras
+from sqlalchemy.dialects import postgresql
+from sqlalchemy import types
+
+postgresql.BOOLEAN = types.Boolean
+
 
 psycopg2.extensions.register_type(psycopg2.extensions.new_type((16,), "BOOLEAN", psycopg2.STRING))
 
