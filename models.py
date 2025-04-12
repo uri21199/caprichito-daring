@@ -58,9 +58,9 @@ class User(db.Model, UserMixin):
     phone = db.Column(db.String(20), nullable=False)
     address = db.Column(db.String(255), nullable=False)
     website = db.Column(db.String(255), nullable=False)
-    role = db.Column(db.Enum('admin', 'user'), default='user', nullable=False)
+    role = db.Column(db.Enum('admin', 'user', name='role_enum'), default='user', nullable=False)
     comprador = db.Column(db.String(255), nullable=True)
-    status = db.Column(db.Enum('active', 'inactive'), default='inactive', nullable=False)
+    status = db.Column(db.Enum('active', 'inactive', name='status_enum'), default='inactive', nullable=False)
     def __repr__(self):
         return f"<User {self.store_name}>"
 
