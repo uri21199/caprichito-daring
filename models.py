@@ -12,7 +12,7 @@ class Product(db.Model):
     description = db.Column(db.Text)
     price = db.Column(db.Numeric(10, 2), nullable=False)
     status = db.Column(db.String(50), default="available")
-    recommended = db.Column(db.Boolean, default=False)
+    recommended = db.Column(db.Boolean(), nullable=False, default=False)
     promotion = db.Column(db.Numeric(10, 2))
     imageurl = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
@@ -28,7 +28,7 @@ class Carousel(db.Model):
     image_url = db.Column(db.String(255), nullable=False)
     title = db.Column(db.String(255), nullable=False)
     subtitle = db.Column(db.String(255), nullable=True)
-    active = db.Column(db.Boolean, default=True)
+    active = db.Column(db.Boolean(), nullable=False, default=True)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
     def __repr__(self):
