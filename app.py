@@ -15,6 +15,11 @@ from models import User, Order, Cart
 from extensions import mail_ext
 from flask_mail import Mail
 import os
+import psycopg2
+import psycopg2.extensions
+import psycopg2.extras
+
+psycopg2.extensions.register_type(psycopg2.extensions.new_type((16,), "BOOLEAN", psycopg2.STRING))
 
 def create_app():
     app = Flask(__name__)
