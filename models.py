@@ -103,7 +103,7 @@ class Cart(db.Model):
 class CartItem(db.Model):
     __tablename__ = 'cart_item'
 
-    cartItem_id = db.Column(db.Integer, primary_key=True)
+    cartitem_id = db.Column(db.Integer, primary_key=True)
     cart_id = db.Column(db.Integer, db.ForeignKey('cart.cart_id'), nullable=False)
     product_id = db.Column(db.Integer, db.ForeignKey('products.product_id'), nullable=False)
     quantity = db.Column(db.Integer, default=1, nullable=False)
@@ -127,7 +127,7 @@ class Order(db.Model):
 
 class OrderItem(db.Model):
     __tablename__ = 'order_item'
-    orderItem_id = db.Column(db.Integer, primary_key=True)
+    orderitem_id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey('orders.order_id'), nullable=False)
     product_id = db.Column(db.Integer, db.ForeignKey('products.product_id'), nullable=False)
     quantity = db.Column(db.Integer, default=1, nullable=False)
