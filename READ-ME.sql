@@ -6,10 +6,10 @@ CREATE TABLE products (
     category_id INT,
     price DECIMAL(10,2) NOT NULL,
     promotion DECIMAL(10,2),
-    imageUrl VARCHAR(255),
+    imageurl VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-INSERT INTO products (name, description, price, promotion, imageUrl)
+INSERT INTO products (name, description, price, promotion, imageurl)
 VALUES
 ('Pelota de Caucho', 'Pelota resistente para perros', 500.00, 450.00, 'img/pelota-caucho.jpg'),
 ('Hueso de Juguete', 'Hueso masticable para perros', 350.00, NULL, 'img/hueso-juguete.jpg'),

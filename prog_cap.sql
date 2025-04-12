@@ -224,7 +224,7 @@ CREATE TABLE `products` (
   `status` varchar(255) DEFAULT 'available',
   `recommended` tinyint(1) DEFAULT 0,
   `promotion` tinyint(1) DEFAULT 0,
-  `imageUrl` text NOT NULL,
+  `imageurl` text NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -232,7 +232,7 @@ CREATE TABLE `products` (
 -- Volcado de datos para la tabla `products`
 --
 
-INSERT INTO `products` (`product_id`, `category_id`, `name`, `description`, `price`, `status`, `recommended`, `promotion`, `imageUrl`, `created_at`) VALUES
+INSERT INTO `products` (`product_id`, `category_id`, `name`, `description`, `price`, `status`, `recommended`, `promotion`, `imageurl`, `created_at`) VALUES
 (1, 1, 'Pelota de Caucho', 'Pelota resistente para perros', 10.99, 'available', 1, 1, 'img/menu-2.jpg', '2025-01-02 00:32:03'),
 (2, 1, 'Hueso de Juguete', 'Hueso masticable para perros', 5.49, 'available', 1, 1, 'img/menu-2.jpg', '2025-01-02 00:32:03'),
 (3, 1, 'Rascador para Gatos', 'Rascador vertical para gatos', 20.99, 'available', 1, 1, 'img/menu-2.jpg', '2025-01-02 00:32:03'),

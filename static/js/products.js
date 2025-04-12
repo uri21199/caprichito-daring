@@ -10,7 +10,7 @@ async function loadProducts() {
             const productCard = `
                 <div class="col-6 col-sm-6 col-md-3 mb-4">
                     <div class="card h-100">
-                        <img src="/static/${product.imageUrl}" class="card-img-top" alt="${product.name}">
+                        <img src="/static/${product.imageurl}" class="card-img-top" alt="${product.name}">
                         <div class="card-body text-center">
                             <h5 class="card-title">${product.name}</h5>
                             ${product.price !== null ? `<p class="card-text">$${product.price}</p>` : ''}

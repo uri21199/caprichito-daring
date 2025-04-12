@@ -27,7 +27,7 @@ def get_cart():
             "product_name": item.product.name,
             "price": float(item.product.price),
             "subtotal": float(item.quantity * item.product.price),
-            "imageUrl": item.product.imageUrl,  # Asegúrate de que el producto tiene esta propiedad
+            "imageurl": item.product.imageurl,  # Asegúrate de que el producto tiene esta propiedad
             "quantity": item.quantity
         }
         for item in cart.cart_items

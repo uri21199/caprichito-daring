@@ -14,7 +14,7 @@ class Product(db.Model):
     status = db.Column(db.String(50), default="available")
     recommended = db.Column(db.Boolean, default=False)
     promotion = db.Column(db.Numeric(10, 2))
-    imageUrl = db.Column(db.String(255))
+    imageurl = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
     def __repr__(self):

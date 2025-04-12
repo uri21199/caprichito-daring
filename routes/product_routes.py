@@ -18,7 +18,7 @@ def get_products():
             "description": product.description,
             "price": float(product.price) if is_logged_in else None,
             "promotion": float(product.promotion) if product.promotion else None,
-            "imageUrl": product.imageUrl
+            "imageurl": product.imageurl
         }
         for product in products
     ]
@@ -36,7 +36,7 @@ def get_all_products():
             "description": product.description,
             "price": float(product.price) if is_logged_in else None, 
             "promotion": float(product.promotion) if product.promotion else None,
-            "imageUrl": product.imageUrl
+            "imageurl": product.imageurl
         }
         for product in products
     ]
